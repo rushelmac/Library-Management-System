@@ -1,7 +1,7 @@
-# Initial Push 
-archit1111 *Done*
+# Initial Push *Done*
+archit1111 
 
-## Testing of app and reporting in the 'Issues' section for any
+# Testing of app and reporting in the 'Issues' section if any
 We three 
 
 # Authentication
