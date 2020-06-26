@@ -10,6 +10,8 @@ const   express         = require('express'),
         BorrowLog       = require('../models/borrow_log'),
         RecordHistory   = require('../models/records_history'),
         Book            = require('../models/book.js');
+        auth            = require("../middleware/authenticate")
+        bcrypt          = require("bcrypt")
 
 //session used to store logged in users
 router.use(session({
@@ -48,8 +50,15 @@ router.get('/login',(req,res)=>{
 });
 
 //user login authentication
-router.post('/login',controller.user_login_Authentication);
-
+router.post('/login',controller.user_login_Authentication,(req,res,next) => {
+    if(res.locals)
+    {
+        res.redirect("/index");
+        console.log(req.session);
+    }
+    else   
+        res.redirect("/login")
+});
 
 //********************************************** ADMIN LOGIN **********************************************
 
@@ -59,7 +68,15 @@ router.get('/adminlogin',(req,res)=>{
 });
 
 //admin login authentication 
-router.post('/adminlogin',controller.admin_login_authentication);
+router.post('/adminlogin',controller.admin_login_authentication, (req,res,next) => {
+    if(res.locals){
+        console.log(req.session);
+        res.redirect("/index");
+    }
+    else{
+        res.redirect("/adminlogin")
+    }
+});
 
 
 //********************************************** USER REGISTERATION **********************************************
@@ -70,8 +87,35 @@ router.get('/register',(req,res)=>{
 });
 
 //Registers a new user into the database
-router.post('/register',controller.user_registeration);
-
+router.post('/register', (req, res, next) => {
+    var saltRounds = 10;
+    User.findOne({userName : req.body.username})
+    .then((user) => {
+        if(user){
+            res.send({
+                Error : "Username Already Exists!.."
+            })
+        }
+        else{
+            bcrypt.hash(req.body.password, saltRounds, (err,hash) => {
+                const new_user = new User({
+                    name : {
+                        fname : req.body.firstName,
+                        mname : req.body.middleName,
+                        lname : req.body.lastName
+                    },
+                    userName : req.body.username,
+                    password : hash
+                });
+                new_user.save((err)=>{
+                    if(err)
+                        res.end(err);
+                    res.redirect('/login');
+                });
+            })
+        }
+    }).catch(err => res.send(err))
+});
 
 //********************************************** MAIN INDEX PAGE **********************************************
 
@@ -87,10 +131,10 @@ router.post('/index',controller.search_books);
 // To verify if the user is logged in
 //      Logged in   - Renders the searched Book's page 
 //      Not logged  - Redirects to User Login page
-router.use("/borrow",(req,res,next)=>{
-    const userName = req.session.name;
-    const password = req.session.password;
-    User.findOne({userName : userName,password : password },(err,found)=>{
+router.use("/borrow",auth.isLogged, auth.verifyUser, (req,res,next)=>{
+    const username = req.session.name;
+    // console.log(userName)
+    User.findOne({userName : username},(err,found)=>{
         if(err){
             console.log("error "+err);
             res.end(err);
@@ -198,7 +242,7 @@ router.post("/borrow/:id",(req,res)=>{
 //Middleware to verify if Admin is Logged in
 router.use("/admin",(req,res,next)=>{
     console.log(req.session);
-    if(!(req.session!=undefined && req.session.admin==1)){
+    if(!(req.session==undefined && !req.session.isAdmin)){
         res.send("Error! Make sure you are logged in.");
     }
     else{

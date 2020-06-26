@@ -8,9 +8,9 @@ const express       = require('express'),
       BorrowLog     = require("./models/borrow_log"),
       controller    = require('./controllers/controller'),
       BorrowRequest = require('./models/borrow_request');
+      passport      = require("passport");
 
-
-mongoose.connect("mongodb://localhost:27017/Library",{ useUnifiedTopology: true , useNewUrlParser: true },(err)=>{
+mongoose.connect("mongodb://localhost:27017/Library2",{ useCreateIndex:true, useUnifiedTopology: true , useNewUrlParser: true },(err)=>{
     if(err){
         console.log("Error connecting to database");
     }
@@ -19,6 +19,8 @@ mongoose.connect("mongodb://localhost:27017/Library",{ useUnifiedTopology: true 
 //var seedData    = require("./seed");
 
 //seedData();
+
+
 app.use(express.static("uploads"));
 app.use(bodyParser.urlencoded({extended : false}));
 app.set('view engine', 'ejs');
