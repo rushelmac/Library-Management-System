@@ -78,8 +78,8 @@ module.exports.userAuth = passport.authenticate("User");
 module.exports.adminAuth = passport.authenticate("Admin");
 
 // check if logged user is admin before performing some operations
-module.exports.verifyAdmin = (req,res,next) => {
-    if(req.session.isAdmin){
+var verifyAdmin = (req,res,next) => {
+    if(req.session && req.session.isAdmin){
         next();
     }
     else{
@@ -90,8 +90,8 @@ module.exports.verifyAdmin = (req,res,next) => {
 }
 
 // check if logged user is user before performing some operations
-module.exports.verifyUser = (req,res,next) => {
-    if(!req.session.isAdmin){
+var verifyUser = (req,res,next) => {
+    if(req.session && !req.session.isAdmin){
         next();
     }
     else{
@@ -101,14 +101,7 @@ module.exports.verifyUser = (req,res,next) => {
     }
 }
 
-// to check if user is logged in before performing some operations
-module.exports.isLogged = (req,res,next) => {
-    if(req.session){
-        next();
-    }
-    else{
-        var err = new Error("Please Log in To Perform this Operation!..");
-        err.status = 403;
-        next(err);
-    }
-}
+module.exports = {
+    verifyAdmin,
+    verifyUser
+};
