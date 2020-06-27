@@ -26,7 +26,11 @@ const userSchema = new mongoose.Schema({
     borrow_status   : [{
         type : mongoose.Schema.Types.ObjectId,
         ref  : "BorrowRequest" 
-    }]
+    }],
+    isAdmin : {
+        type : Boolean,
+        default : false
+    }
 });
 
 /*userSchema.path('borrow_status').validate(function (curr) {

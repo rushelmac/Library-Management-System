@@ -9,7 +9,8 @@ const   express         = require('express'),
         BorrowRequest   = require('../models/borrow_request'),
         BorrowLog       = require('../models/borrow_log'),
         RecordHistory   = require('../models/records_history'),        
-        Book            = require('../models/book.js');
+        Book            = require('../models/book.js'),
+        bcrypt          = require("bcrypt");
 
 //This function will delete a borrow_request if its timer has expired and restore the book as available
 function borrow_check(){
@@ -87,8 +88,8 @@ function uploadhandler(req,res){
 }
 
 //User login authentication
-function user_login_Authentication(req,res){
-    User.findOne({userName : req.body.username,password : req.body.password},(err,found)=>{
+function user_login_Authentication(req,res,next){
+    User.findOne({userName : req.body.username},(err,found)=>{
         if(err){
             res.end(err);
         }
@@ -96,6 +97,7 @@ function user_login_Authentication(req,res){
             res.render('login',{err:1});
         }
         else{
+<<<<<<< HEAD
             let sess = req.session;
             sess.name = req.body.username;
             sess.password = req.body.password;
@@ -103,14 +105,29 @@ function user_login_Authentication(req,res){
             console.log(req.session);
             // alert('Login Succesful !');
             res.redirect('/index');            
+=======
+            bcrypt.compare(req.body.password,found.password,(err,result)=>{
+                if(result == true){
+                    let sess = req.session;
+                    sess.name = req.body.username;
+                    sess.password = req.body.password;
+                    sess.isAdmin = found.isAdmin;
+                    res.locals = true;
+                }
+                else{
+                    res.locals = false;
+                }
+                next();
+            })           
+>>>>>>> d6bb11ec5ed2afa9818efb437117872450f7f5ca
         }
     });
 }
 
 //Admin login authentication
-function admin_login_authentication(req,res){
-    Admin.findOne({userName : req.body.username,password : req.body.password},(err,found)=>{
-        console.log(req.body);
+function admin_login_authentication(req,res,next){
+    console.log(req.body.username)
+    Admin.findOne({username : req.body.username},(err,found)=>{
         if(err){
             res.end(err);
         }
@@ -118,34 +135,18 @@ function admin_login_authentication(req,res){
             res.render('adminlogin',{err:1});
         }
         else{
-            let sess = req.session;
-            sess.name = req.body.username;
-            sess.password = req.body.password;
-            sess.admin=1;
-            console.log(req.session);
-            //alert('Login Succesful !');
-            res.redirect('/index');            
+            if(req.body.password === found.password){
+                let sess = req.session;
+                sess.name = req.body.username;
+                sess.password = req.body.password;
+                sess.isAdmin = found.isAdmin;
+                res.locals = true;
+            }
+            else{
+                req.locals = false;
+            }
+            next();
         }
-        
-    });
-}
-
-//New User Registeration
-function user_registeration(req,res){
-    const new_user = new User({
-        name : {
-            fname : req.body.firstName,
-            mname : req.body.middleName,
-            lname : req.body.lastName
-        },
-        userName : req.body.username,
-        password : req.body.password
-    });
-    console.log(new_user)
-    new_user.save((err)=>{
-        if(err)
-            res.end(err);
-        res.redirect('/login');
     });
 }
 
@@ -183,7 +184,6 @@ module.exports = {  borrow_check,
                     uploadhandler,
                     user_login_Authentication,
                     admin_login_authentication,
-                    user_registeration,
                     display_books,
                     search_books
                 };
