@@ -4,7 +4,6 @@ const   express         = require('express'),
         formidable      = require('formidable'),
         fs              = require('fs'),
         path            = require('path'),
-        session         = require('express-session'),
         Admin           = require('../models/admin'),
         User            = require('../models/user'),
         BorrowRequest   = require('../models/borrow_request'),
@@ -100,8 +99,9 @@ function user_login_Authentication(req,res){
             let sess = req.session;
             sess.name = req.body.username;
             sess.password = req.body.password;
+            console.log("Logged in successfully");
             console.log(req.session);
-            //alert('Login Succesful !');
+            // alert('Login Succesful !');
             res.redirect('/index');            
         }
     });

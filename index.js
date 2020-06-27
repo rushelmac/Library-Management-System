@@ -10,7 +10,7 @@ const express       = require('express'),
       BorrowRequest = require('./models/borrow_request');
 
 
-mongoose.connect("mongodb://localhost:27017/Library",{ useUnifiedTopology: true , useNewUrlParser: true },(err)=>{
+mongoose.connect("mongodb://localhost:27017/Library2",{ useUnifiedTopology: true , useNewUrlParser: true },(err)=>{
     if(err){
         console.log("Error connecting to database");
     }

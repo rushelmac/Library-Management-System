@@ -1,0 +1,11 @@
+//Admin routes
+// 1.Route to render the admin page                 "/admin" 
+// 2.Route to render the user registration form     "/userRegister"
+// 3.Route to add the new user database             "/userRegister"
+// 4.Route to render the form to add new book       "/admin/addBook"
+// 5.Route to add new book database                 "/admin/addBook"
+// 6.Route to update the book :                     "/index/:id"
+// 7.Route to delete the book :                     "/index/:id"
+// 8.Route to render the update book form :         "/index/:id/updateBook"
+// 9.Rout to accept borrow request                  "/admin/acceptRequest"
+// 10.Route to accept the return request.           "/admin/returnRequest"
