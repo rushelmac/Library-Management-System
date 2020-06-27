@@ -97,7 +97,6 @@ function user_login_Authentication(req,res,next){
             res.render('login',{err:1});
         }
         else{
-<<<<<<< HEAD
             let sess = req.session;
             sess.name = req.body.username;
             sess.password = req.body.password;
@@ -105,21 +104,6 @@ function user_login_Authentication(req,res,next){
             console.log(req.session);
             // alert('Login Succesful !');
             res.redirect('/index');            
-=======
-            bcrypt.compare(req.body.password,found.password,(err,result)=>{
-                if(result == true){
-                    let sess = req.session;
-                    sess.name = req.body.username;
-                    sess.password = req.body.password;
-                    sess.isAdmin = found.isAdmin;
-                    res.locals = true;
-                }
-                else{
-                    res.locals = false;
-                }
-                next();
-            })           
->>>>>>> d6bb11ec5ed2afa9818efb437117872450f7f5ca
         }
     });
 }
