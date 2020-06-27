@@ -57,7 +57,7 @@ router.post('/login',controller.user_login_Authentication,(req,res,next) => {
         console.log(req.session);
     }
     else   
-        res.redirect("/login")
+        res.redirect("/login");
 });
 
 //********************************************** ADMIN LOGIN **********************************************
@@ -294,6 +294,7 @@ router.get('/admin/delete',(req,res)=>{
 });
 
 //Renders delete page with searched Book records
+//This route can be a Delete methode route where delete buttom is shown at book display page to only admin.
 router.post('/admin/delete',(req,res)=>{
     let bookName,Author,Tag,Description;
     let regex = new RegExp(req.body.Search,'i');    
@@ -308,7 +309,7 @@ router.post('/admin/delete',(req,res)=>{
     });
 });
 
-
+//Unnecessary route
 //Deletes a Book record from Database
 router.post('/admin/deleteBookAction',(req,res)=>{
     console.log(req.body);

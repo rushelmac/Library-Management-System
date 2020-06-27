@@ -12,7 +12,7 @@ const   express         = require('express'),
         Book            = require('../models/book.js'),
         bcrypt          = require("bcrypt");
 
-//This function will delete a borrow_request if its timer has expired and restore the book as available
+//Delete a borrow_request if its timer has expired and restore the book as available
 function borrow_check(){
     BorrowRequest.find({},(err,reqs)=>{
         const current_time=new Date();
@@ -35,7 +35,7 @@ function borrow_check(){
 }
 setInterval(borrow_check,10000);
 
-//This function will send notification once the return deadline is near
+//Send notification once the return deadline is near
 function notifications(){
     const transporter = nodemailer.createTransport({
         service : 'gmail',
@@ -68,6 +68,7 @@ function notifications(){
 }
 setInterval(notifications,1000000);
 
+//Setting up formidable
 function uploadhandler(req,res){
         const form = new formidable.IncomingForm({uploadDir:path.join(__dirname,'../uploads/')},{keepExtensions:true});
         let id,file_path = form.uploadDir;
