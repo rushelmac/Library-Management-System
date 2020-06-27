@@ -1,3 +1,5 @@
+const { route } = require('./routes/routes');
+
 const express       = require('express'),
       app           = express(),
       bodyParser    = require('body-parser'),
@@ -10,12 +12,7 @@ const express       = require('express'),
       BorrowRequest = require('./models/borrow_request');
       passport      = require("passport");
 
-<<<<<<< HEAD
-
-mongoose.connect("mongodb://localhost:27017/Library2",{ useUnifiedTopology: true , useNewUrlParser: true },(err)=>{
-=======
 mongoose.connect("mongodb://localhost:27017/Library2",{ useCreateIndex:true, useUnifiedTopology: true , useNewUrlParser: true },(err)=>{
->>>>>>> d6bb11ec5ed2afa9818efb437117872450f7f5ca
     if(err){
         console.log("Error connecting to database");
     }
@@ -31,6 +28,7 @@ app.use(bodyParser.urlencoded({extended : false}));
 app.set('view engine', 'ejs');
 app.use(routes);
 app.use(controller.borrow_check);
+
 app.listen(1234,()=>{
     console.log("Server running...");
 });

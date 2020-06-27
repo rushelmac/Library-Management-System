@@ -31,7 +31,7 @@ function borrow_check(){
                 });
             }
         }
-    })
+    });
 }
 setInterval(borrow_check,10000);
 
@@ -83,7 +83,7 @@ function uploadhandler(req,res){
             console.log('5.'+id);
             console.log('6.'+file_path);
             Book.updateOne({_id:id},{img_path:file_path},{multi:true},(err,book)=>{console.log(book);});
-        })
+        });
         res.render('update_book',{upload:1});
 }
 

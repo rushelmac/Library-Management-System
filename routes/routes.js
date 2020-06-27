@@ -131,7 +131,7 @@ router.post('/index',controller.search_books);
 // To verify if the user is logged in
 //      Logged in   - Renders the searched Book's page 
 //      Not logged  - Redirects to User Login page
-router.use("/borrow",auth.isLogged, auth.verifyUser, (req,res,next)=>{
+router.get("/borrow", auth.verifyUser, (req,res,next)=>{
     const username = req.session.name;
     // console.log(userName)
     User.findOne({userName : username},(err,found)=>{
